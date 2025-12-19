@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>سامانه ارزیابی کتاب‌های درسی</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #1a237e;
+        --primary-light: #534bae;
+        --primary-dark: #000051;
+        --secondary: #d32f2f;
+        --secondary-light: #ff6659;
+        --secondary-dark: #9a0007;
+        --accent: #ffab00;
+        --text-primary: #212121;
+        --text-secondary: #757575;
+        --background: #f5f5f5;
+        --surface: #ffffff;
+        --success: #4caf50;
+        --warning: #ff9800;
+        --error: #f44336;
+        --border-radius: 12px;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Vazir", "Tahoma", Arial, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-dark) 100%
+        );
+        color: white;
+        padding: 30px 40px;
+        border-radius: var(--border-radius);
+        margin-bottom: 30px;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        transform: translate(30%, -30%);
+      }
+
+      .header::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 150px;
+        height: 150px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        transform: translate(-30%, 30%);
+      }
+
+      .logo-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .logo {
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        overflow: hidden;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .title-section {
+        text-align: center;
+      }
+
+      .title-section h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+
+      .title-section p {
+        font-size: 18px;
+        opacity: 0.8;
+        margin-top: 5px;
+      }
+
+      .creator-info {
+        margin-top: 15px;
+        font-size: 16px;
+        opacity: 0.9;
+      }
+
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 30px;
+      }
+
+      .evaluation-section {
+        background: var(--surface);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 30px;
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .section-title i {
+        color: var(--primary);
+        font-size: 24px;
+      }
+
+      .section-title h2 {
+        font-size: 22px;
+        color: var(--primary);
+      }
+
+      .book-info-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: #fafafa;
+      }
+
+      .form-control:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+        outline: none;
+      }
+
+      .principles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+      }
+
+      .principle-card {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 25px;
+        transition: all 0.3s ease;
+        border-top: 4px solid var(--primary);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .principle-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .principle-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .principle-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--primary);
+        color: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin-left: 15px;
+      }
+
+      .principle-title h3 {
+        font-size: 18px;
+        color: var(--primary);
+        margin-bottom: 5px;
+      }
+
+      .principle-title p {
+        font-size: 14px;
+        color: var(--text-secondary);
+      }
+
+      .criteria-list {
+        margin-top: 15px;
+      }
+
+      .criterion {
+        margin-bottom: 18px;
+      }
+
+      .criterion label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: var(--text-primary);
+      }
+
+      .score-input {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .score-slider {
+        flex: 1;
+        -webkit-appearance: none;
+        width: 100%;
+        height: 8px;
+        border-radius: 5px;
+        background: #e0e0e0;
+        outline: none;
+      }
+
+      .score-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--primary);
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .score-value {
+        width: 40px;
+        text-align: center;
+        font-weight: bold;
+        color: var(--primary);
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .summary-card {
+        background: var(--surface);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 25px;
+      }
+
+      .score-display {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .total-score {
+        font-size: 48px;
+        font-weight: 800;
+        color: var(--primary);
+        margin: 10px 0;
+      }
+
+      .score-bar-container {
+        height: 20px;
+        background: #e0e0e0;
+        border-radius: 10px;
+        margin: 25px 0;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .score-bar {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--error),
+          var(--warning),
+          var(--success)
+        );
+        border-radius: 10px;
+        transition: width 1s ease;
+        position: relative;
+      }
+
+      .score-markers {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      .principle-scores {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .principle-score-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .principle-score-item:hover {
+        background: #f0f0f0;
+      }
+
+      .principle-score-name {
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .principle-score-value {
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 16px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+      }
+
+      .btn-secondary {
+        background: #f0f0f0;
+        color: var(--text-primary);
+      }
+
+      .btn-secondary:hover {
+        background: #e0e0e0;
+        transform: translateY(-2px);
+      }
+
+      .btn-print {
+        background: var(--accent);
+        color: var(--text-primary);
+      }
+
+      .btn-print:hover {
+        background: #ff8f00;
+        transform: translateY(-2px);
+      }
+
+      .results-card {
+        background: var(--surface);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 25px;
+        display: none;
+      }
+
+      .grade-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+
+      .recommendations {
+        margin-top: 25px;
+      }
+
+      .recommendation-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 15px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        border-right: 3px solid var(--primary);
+      }
+
+      .recommendation-item i {
+        color: var(--primary);
+        margin-top: 2px;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 40px;
+        padding: 20px;
+        color: var(--text-secondary);
+        font-size: 14px;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      @media (max-width: 1200px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+
+        .book-info-form {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header {
+          padding: 20px;
+        }
+
+        .principles-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+
+        .title-section h1 {
+          font-size: 24px;
+        }
+
+        .title-section p {
+          font-size: 16px;
+        }
+      }
+
+      @media print {
+        body {
+          background: white;
+          padding: 0;
+        }
+
+        .header,
+        .evaluation-section,
+        .summary-card,
+        .action-buttons,
+        .footer {
+          box-shadow: none;
+          border: 1px solid #ddd;
+        }
+
+        .btn {
+          display: none;
+        }
+
+        .results-card {
+          display: block !important;
+          page-break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="logo-section">
+          <div class="logo">
+            <img
+              src="https://s6.uupload.ir/files/inshot_۲۰۲۴۰۹۲۱_۰۶۳۷۴۸۹۱۳_xkyl.jpg"
+              alt="علیرضا حمیدی"
+            />
+          </div>
+          <div class="title-section">
+            <h1>سامانه ارزیابی کتاب‌های درسی</h1>
+            <p>ارزیابی علمی و تخصصی کتاب‌های درسی بر اساس مدل مریل</p>
+          </div>
+        </div>
+        <div class="creator-info">
+          تولید کننده: علیرضا حمیدی کارشناس آموزش و پرورش ابتدائی
+        </div>
+      </header>
+
+      <div class="main-content">
+        <div class="evaluation-section">
+          <div class="section-title">
+            <i class="fas fa-info-circle"></i>
+            <h2>مشخصات کتاب درسی</h2>
+          </div>
+
+          <div class="book-info-form">
+            <div class="form-group">
+              <label for="bookTitle"
+                ><i class="fas fa-book"></i> عنوان کتاب</label
+              >
+              <input
+                type="text"
+                id="bookTitle"
+                class="form-control"
+                placeholder="مثال: ریاضی پایه هشتم"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="bookGrade"
+                ><i class="fas fa-graduation-cap"></i> پایه تحصیلی</label
+              >
+              <select id="bookGrade" class="form-control">
+                <option value="">انتخاب پایه تحصیلی</option>
+                <option value="first">اول دبستان</option>
+                <option value="second">دوم دبستان</option>
+                <option value="third">سوم دبستان</option>
+                <option value="fourth">چهارم دبستان</option>
+                <option value="fifth">پنجم دبستان</option>
+                <option value="sixth">ششم دبستان</option>
+                <option value="seventh">هفتم</option>
+                <option value="eighth">هشتم</option>
+                <option value="ninth">نهم</option>
+                <option value="tenth">دهم</option>
+                <option value="eleventh">یازدهم</option>
+                <option value="twelfth">دوازدهم</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="bookSubject"
+                ><i class="fas fa-pencil-alt"></i> درس</label
+              >
+              <input
+                type="text"
+                id="bookSubject"
+                class="form-control"
+                placeholder="مثال: ریاضی، علوم، فارسی"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="bookPublisher"
+                ><i class="fas fa-university"></i> ناشر</label
+              >
+              <input
+                type="text"
+                id="bookPublisher"
+                class="form-control"
+                placeholder="سازمان پژوهش و برنامه‌ریزی آموزشی"
+              />
+            </div>
+          </div>
+
+          <div class="section-title">
+            <i class="fas fa-clipboard-check"></i>
+            <h2>ارزیابی اصول آموزشی مریل</h2>
+          </div>
+
+          <div class="principles-grid">
+            <!-- اصل 1: حل مسئله -->
+            <div class="principle-card">
+              <div class="principle-header">
+                <div class="principle-icon">
+                  <i class="fas fa-puzzle-piece"></i>
+                </div>
+                <div class="principle-title">
+                  <h3>حل مسئله</h3>
+                  <p>Problem-Centered</p>
+                </div>
+              </div>
+              <div class="criteria-list">
+                <div class="criterion">
+                  <label>تمرکز بر مسائل واقعی و کاربردی</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="problemRealWorld"
+                    />
+                    <span class="score-value" id="problemRealWorldValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>تنوع مسائل و سناریوها</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="problemDiversity"
+                    />
+                    <span class="score-value" id="problemDiversityValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>پروژه‌های عملی و تحقیقی</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="problemProjects"
+                    />
+                    <span class="score-value" id="problemProjectsValue">3</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- اصل 2: فعال‌سازی -->
+            <div class="principle-card">
+              <div class="principle-header">
+                <div class="principle-icon">
+                  <i class="fas fa-bolt"></i>
+                </div>
+                <div class="principle-title">
+                  <h3>فعال‌سازی</h3>
+                  <p>Activation</p>
+                </div>
+              </div>
+              <div class="criteria-list">
+                <div class="criterion">
+                  <label>سوالات پیش‌دانش و مرور مطالب</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="activationPriorKnowledge"
+                    />
+                    <span class="score-value" id="activationPriorKnowledgeValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>ارتباط با زندگی روزمره</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="activationRealLife"
+                    />
+                    <span class="score-value" id="activationRealLifeValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>فعالیت‌های آغازین جذاب</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="activationActivities"
+                    />
+                    <span class="score-value" id="activationActivitiesValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- اصل 3: نمایش -->
+            <div class="principle-card">
+              <div class="principle-header">
+                <div class="principle-icon">
+                  <i class="fas fa-desktop"></i>
+                </div>
+                <div class="principle-title">
+                  <h3>نمایش</h3>
+                  <p>Demonstration</p>
+                </div>
+              </div>
+              <div class="criteria-list">
+                <div class="criterion">
+                  <label>مثال‌های حل‌شده و واضح</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="demonstrationExamples"
+                    />
+                    <span class="score-value" id="demonstrationExamplesValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>کیفیت تصاویر و نمودارها</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="demonstrationVisuals"
+                    />
+                    <span class="score-value" id="demonstrationVisualsValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>استفاده از رسانه‌های متنوع</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="demonstrationMedia"
+                    />
+                    <span class="score-value" id="demonstrationMediaValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- اصل 4: کاربست -->
+            <div class="principle-card">
+              <div class="principle-header">
+                <div class="principle-icon">
+                  <i class="fas fa-tasks"></i>
+                </div>
+                <div class="principle-title">
+                  <h3>کاربست</h3>
+                  <p>Application</p>
+                </div>
+              </div>
+              <div class="criteria-list">
+                <div class="criterion">
+                  <label>تمرین‌های ساده (یادآوری)</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="applicationSimple"
+                    />
+                    <span class="score-value" id="applicationSimpleValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>مسائل پیچیده (تفکر سطح بالا)</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="applicationComplex"
+                    />
+                    <span class="score-value" id="applicationComplexValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>فعالیت‌های آزمایشگاهی و عملی</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="applicationLabs"
+                    />
+                    <span class="score-value" id="applicationLabsValue">3</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- اصل 5: یکپارچگی -->
+            <div class="principle-card">
+              <div class="principle-header">
+                <div class="principle-icon">
+                  <i class="fas fa-link"></i>
+                </div>
+                <div class="principle-title">
+                  <h3>یکپارچگی</h3>
+                  <p>Integration</p>
+                </div>
+              </div>
+              <div class="criteria-list">
+                <div class="criterion">
+                  <label>ارتباط با سایر دروس</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="integrationCrossSubject"
+                    />
+                    <span class="score-value" id="integrationCrossSubjectValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>فعالیت‌های گروهی و مشارکتی</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="integrationGroup"
+                    />
+                    <span class="score-value" id="integrationGroupValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+                <div class="criterion">
+                  <label>سوالات تفکر انتقادی و انعکاسی</label>
+                  <div class="score-input">
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      value="3"
+                      class="score-slider"
+                      id="integrationReflection"
+                    />
+                    <span class="score-value" id="integrationReflectionValue"
+                      >3</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn btn-primary" onclick="calculateScore()">
+              <i class="fas fa-calculator"></i>
+              محاسبه ارزیابی
+            </button>
+            <button class="btn btn-secondary" onclick="resetForm()">
+              <i class="fas fa-redo"></i>
+              بازنشانی فرم
+            </button>
+            <button class="btn btn-print" onclick="window.print()">
+              <i class="fas fa-print"></i>
+              چاپ نتایج
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar">
+          <div class="summary-card">
+            <div class="section-title">
+              <i class="fas fa-chart-bar"></i>
+              <h2>خلاصه ارزیابی</h2>
+            </div>
+
+            <div class="score-display">
+              <div style="font-size: 18px; color: var(--text-secondary)">
+                امتیاز کلی کتاب
+              </div>
+              <div id="totalScore" class="total-score">0</div>
+              <div
+                id="gradeBadge"
+                class="grade-badge"
+                style="background: #e0e0e0"
+              >
+                ارزیابی نشده
+              </div>
+            </div>
+
+            <div class="score-bar-container">
+              <div id="scoreBar" class="score-bar" style="width: 0%"></div>
+            </div>
+            <div class="score-markers">
+              <span>ضعیف</span>
+              <span>متوسط</span>
+              <span>خوب</span>
+              <span>عالی</span>
+            </div>
+
+            <div class="principle-scores">
+              <div class="principle-score-item">
+                <span class="principle-score-name">حل مسئله</span>
+                <span class="principle-score-value" id="problemScoreValue"
+                  >0/15</span
+                >
+              </div>
+              <div class="principle-score-item">
+                <span class="principle-score-name">فعال‌سازی</span>
+                <span class="principle-score-value" id="activationScoreValue"
+                  >0/15</span
+                >
+              </div>
+              <div class="principle-score-item">
+                <span class="principle-score-name">نمایش</span>
+                <span class="principle-score-value" id="demonstrationScoreValue"
+                  >0/15</span
+                >
+              </div>
+              <div class="principle-score-item">
+                <span class="principle-score-name">کاربست</span>
+                <span class="principle-score-value" id="applicationScoreValue"
+                  >0/15</span
+                >
+              </div>
+              <div class="principle-score-item">
+                <span class="principle-score-name">یکپارچگی</span>
+                <span class="principle-score-value" id="integrationScoreValue"
+                  >0/15</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div id="resultsCard" class="results-card">
+            <div class="section-title">
+              <i class="fas fa-clipboard-list"></i>
+              <h2>نتایج و پیشنهادات</h2>
+            </div>
+
+            <div
+              id="bookInfoResult"
+              style="
+                text-align: center;
+                margin-bottom: 20px;
+                padding: 15px;
+                background: #f9f9f9;
+                border-radius: 8px;
+              "
+            ></div>
+
+            <div class="recommendations">
+              <h3 style="margin-bottom: 15px; color: var(--primary)">
+                پیشنهادات برای بهبود کتاب:
+              </h3>
+              <div id="recommendationsList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <p>تولید کننده: علیرضا حمیدی کارشناس آموزش و پرورش ابتدائی</p>
+      </footer>
+    </div>
+
+    <script>
+      // Initialize slider values
+      document.querySelectorAll(".score-slider").forEach((slider) => {
+        const valueElement = document.getElementById(slider.id + "Value");
+        valueElement.textContent = slider.value;
+
+        slider.addEventListener("input", function () {
+          valueElement.textContent = this.value;
+        });
+      });
+
+      function calculateScore() {
+        // Get book information
+        const bookTitle =
+          document.getElementById("bookTitle").value || "کتاب بدون عنوان";
+        const bookGrade = document.getElementById("bookGrade").value;
+        const bookSubject =
+          document.getElementById("bookSubject").value || "درس نامشخص";
+        const bookPublisher =
+          document.getElementById("bookPublisher").value || "ناشر نامشخص";
+
+        const gradeNames = {
+          first: "اول دبستان",
+          second: "دوم دبستان",
+          third: "سوم دبستان",
+          fourth: "چهارم دبستان",
+          fifth: "پنجم دبستان",
+          sixth: "ششم دبستان",
+          seventh: "هفتم",
+          eighth: "هشتم",
+          ninth: "نهم",
+          tenth: "دهم",
+          eleventh: "یازدهم",
+          twelfth: "دوازدهم",
+        };
+
+        const gradeText = gradeNames[bookGrade] || "پایه نامشخص";
+
+        // Calculate scores for each principle
+        const problemScore =
+          parseInt(document.getElementById("problemRealWorld").value) +
+          parseInt(document.getElementById("problemDiversity").value) +
+          parseInt(document.getElementById("problemProjects").value);
+
+        const activationScore =
+          parseInt(document.getElementById("activationPriorKnowledge").value) +
+          parseInt(document.getElementById("activationRealLife").value) +
+          parseInt(document.getElementById("activationActivities").value);
+
+        const demonstrationScore =
+          parseInt(document.getElementById("demonstrationExamples").value) +
+          parseInt(document.getElementById("demonstrationVisuals").value) +
+          parseInt(document.getElementById("demonstrationMedia").value);
+
+        const applicationScore =
+          parseInt(document.getElementById("applicationSimple").value) +
+          parseInt(document.getElementById("applicationComplex").value) +
+          parseInt(document.getElementById("applicationLabs").value);
+
+        const integrationScore =
+          parseInt(document.getElementById("integrationCrossSubject").value) +
+          parseInt(document.getElementById("integrationGroup").value) +
+          parseInt(document.getElementById("integrationReflection").value);
+
+        // Calculate total score and percentage
+        const totalScore =
+          problemScore +
+          activationScore +
+          demonstrationScore +
+          applicationScore +
+          integrationScore;
+        const maxPossibleScore = 75; // 5 principles × 15 points each
+        const percentage = Math.round((totalScore / maxPossibleScore) * 100);
+
+        // Display book information
+        document.getElementById("bookInfoResult").innerHTML = `
+                <strong>${bookTitle}</strong><br>
+                <span>${bookSubject} - ${gradeText} - ${bookPublisher}</span>
+            `;
+
+        // Display total score
+        document.getElementById(
+          "totalScore"
+        ).textContent = `${totalScore}/${maxPossibleScore}`;
+
+        // Update progress bar
+        document.getElementById("scoreBar").style.width = percentage + "%";
+
+        // Display principle scores
+        document.getElementById(
+          "problemScoreValue"
+        ).textContent = `${problemScore}/15`;
+        document.getElementById(
+          "activationScoreValue"
+        ).textContent = `${activationScore}/15`;
+        document.getElementById(
+          "demonstrationScoreValue"
+        ).textContent = `${demonstrationScore}/15`;
+        document.getElementById(
+          "applicationScoreValue"
+        ).textContent = `${applicationScore}/15`;
+        document.getElementById(
+          "integrationScoreValue"
+        ).textContent = `${integrationScore}/15`;
+
+        // Determine grade and recommendations
+        let grade, badgeColor, recommendations;
+        if (percentage >= 85) {
+          grade = "کیفیت عالی";
+          badgeColor = "#4caf50";
+          recommendations = [
+            "کتاب از استانداردهای آموزشی بالایی برخوردار است.",
+            "حفظ و تداوم این کیفیت در چاپ‌های بعدی توصیه می‌شود.",
+            "می‌توان برای کتاب‌های دیگر به عنوان الگو استفاده کرد.",
+          ];
+        } else if (percentage >= 70) {
+          grade = "کیفیت خوب";
+          badgeColor = "#8bc34a";
+          recommendations = [
+            "کتاب کیفیت مطلوبی دارد و نیاز به تغییرات اساسی نیست.",
+            "افزایش تنوع در مسائل و فعالیت‌های گروهی پیشنهاد می‌شود.",
+            "بهبود بخش نمایش با اضافه کردن مثال‌های بیشتر مفید خواهد بود.",
+          ];
+        } else if (percentage >= 55) {
+          grade = "قابل قبول";
+          badgeColor = "#ff9800";
+          recommendations = [
+            "کتاب نیاز به بازنگری و بهبود دارد.",
+            "افزایش مسائل واقعی و کاربردی پیشنهاد می‌شود.",
+            "اضافه کردن فعالیت‌های گروهی و مشارکتی ضروری است.",
+            "بهبود کیفیت تصاویر و نمودارها توصیه می‌شود.",
+          ];
+        } else if (percentage >= 40) {
+          grade = "نیاز به بهبود";
+          badgeColor = "#f44336";
+          recommendations = [
+            "کتاب نیاز به بازنگری اساسی دارد.",
+            "بازنویسی بخش‌های حل مسئله و کاربست ضروری است.",
+            "افزایش قابل توجه مثال‌های حل‌شده و تمرین‌ها لازم است.",
+            "ارتباط با زندگی واقعی باید تقویت شود.",
+          ];
+        } else {
+          grade = "نیاز به بازنگری کامل";
+          badgeColor = "#b71c1c";
+          recommendations = [
+            "کتاب از استانداردهای آموزشی لازم برخوردار نیست.",
+            "بازنویسی کامل کتاب پیشنهاد می‌شود.",
+            "استفاده از مشاوران متخصص در زمینه طراحی آموزشی ضروری است.",
+            "برگزاری کارگاه‌های بازنگری برای مولفان توصیه می‌شود.",
+          ];
+        }
+
+        // Update grade badge
+        const gradeBadge = document.getElementById("gradeBadge");
+        gradeBadge.textContent = grade;
+        gradeBadge.style.background = badgeColor;
+
+        // Display recommendations
+        const recommendationsList = document.getElementById(
+          "recommendationsList"
+        );
+        recommendationsList.innerHTML = "";
+
+        recommendations.forEach((rec) => {
+          const recItem = document.createElement("div");
+          recItem.className = "recommendation-item";
+          recItem.innerHTML = `
+                    <i class="fas fa-lightbulb"></i>
+                    <span>${rec}</span>
+                `;
+          recommendationsList.appendChild(recItem);
+        });
+
+        // Show results card
+        document.getElementById("resultsCard").style.display = "block";
+
+        // Scroll to results
+        document
+          .getElementById("resultsCard")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      function resetForm() {
+        document.getElementById("bookTitle").value = "";
+        document.getElementById("bookGrade").value = "";
+        document.getElementById("bookSubject").value = "";
+        document.getElementById("bookPublisher").value = "";
+
+        document.querySelectorAll(".score-slider").forEach((slider) => {
+          slider.value = 3;
+          const valueElement = document.getElementById(slider.id + "Value");
+          valueElement.textContent = "3";
+        });
+
+        document.getElementById("totalScore").textContent = "0";
+        document.getElementById("scoreBar").style.width = "0%";
+
+        document.getElementById("problemScoreValue").textContent = "0/15";
+        document.getElementById("activationScoreValue").textContent = "0/15";
+        document.getElementById("demonstrationScoreValue").textContent = "0/15";
+        document.getElementById("applicationScoreValue").textContent = "0/15";
+        document.getElementById("integrationScoreValue").textContent = "0/15";
+
+        const gradeBadge = document.getElementById("gradeBadge");
+        gradeBadge.textContent = "ارزیابی نشده";
+        gradeBadge.style.background = "#e0e0e0";
+
+        document.getElementById("resultsCard").style.display = "none";
+      }
+    </script>
+  </body>
+</html>
